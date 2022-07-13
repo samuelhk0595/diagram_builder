@@ -1,12 +1,16 @@
 import 'package:diagram_builder/presentation/model/node_model.dart';
+import 'package:diagram_builder/presentation/model/path_model.dart';
 import 'package:flutter/cupertino.dart';
 
-class DiagramViewModel extends ValueNotifier{
-  DiagramViewModel():super(0);
+class DiagramViewModel extends ValueNotifier {
+  DiagramViewModel() : super(0);
 
-  Map<String,NodeModel> nodes = {};
+  Map<String, NodeModel> nodes = {};
+  List<PathModel> paths = [];
 
-void updateNodePosition({
+  Offset cursorPosition = Offset.zero;
+
+  void updateNodePosition({
     required String nodeId,
     required Offset position,
   }) {
@@ -15,4 +19,8 @@ void updateNodePosition({
     notifyListeners();
   }
 
+  void updateCursorPosition(Offset position) {
+    cursorPosition = position;
+    notifyListeners();
+  }
 }
