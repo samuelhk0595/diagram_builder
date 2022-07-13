@@ -6,6 +6,8 @@ class ArrowPathCreator extends PathCreator {
   @override
   List<Offset> generatePoints(PathModel path) {
     final points = [path.origin];
+    points.add(path.target);
+    return points;
 
     switch (getRelativeTargetPosition(
         originOffset: path.origin, targetOffset: path.target)) {
@@ -14,12 +16,15 @@ class ArrowPathCreator extends PathCreator {
         points.add(path.target);
         break;
       case TargetNodePosition.diagonalBottomLeft:
+        points.add(Offset(path.origin.dx, path.target.dy));
         points.add(path.target);
         break;
       case TargetNodePosition.diagonalTopRight:
+        points.add(Offset(path.origin.dx, path.target.dy));
         points.add(path.target);
         break;
       case TargetNodePosition.diagonalBottomRight:
+        points.add(Offset(path.origin.dx, path.target.dy));
         points.add(path.target);
         break;
 

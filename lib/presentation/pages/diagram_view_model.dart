@@ -8,6 +8,7 @@ class DiagramViewModel extends ValueNotifier {
   Map<String, NodeModel> nodes = {};
   List<PathModel> paths = [];
 
+  PathModel? cursorPath;
   Offset cursorPosition = Offset.zero;
 
   void updateNodePosition({
@@ -16,6 +17,21 @@ class DiagramViewModel extends ValueNotifier {
   }) {
     final node = nodes[nodeId];
     node!.position = position;
+    notifyListeners();
+  }
+
+  void startCursorPath(Offset position) {
+    cursorPath = PathModel(origin: position, target: position);
+    notifyListeners();
+  }
+
+  void updateCursorPath(Offset position) {
+    cursorPath!.target = position;
+    notifyListeners();
+  }
+
+  void stopCursorPath() {
+    cursorPath = null;
     notifyListeners();
   }
 
