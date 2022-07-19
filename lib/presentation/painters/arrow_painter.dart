@@ -17,25 +17,28 @@ class ArrowPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if (paths.isEmpty) return;
     const pointMode = ui.PointMode.polygon;
-
-    final points = pathCretor?.generatePoints(paths.first) ??
-        [paths.first.origin, paths.first.target];
-
     final paint = Paint()
       ..color = Colors.black
       ..strokeWidth = 1
       ..strokeCap = StrokeCap.round;
-    canvas.drawPoints(pointMode, points, paint);
 
-    for (final point in points) {
-      TextSpan span =
-          TextSpan(style: TextStyle(color: Colors.red), text: point.toString());
-      TextPainter tp = TextPainter(
-          text: span,
-          textAlign: TextAlign.left,
-          textDirection: TextDirection.ltr);
-      tp.layout();
-      tp.paint(canvas, point);
+    for (final path in paths) {
+      final points =
+          pathCretor?.generatePoints(path) ?? [path.origin, path.target];
+
+
+      canvas.drawPoints(pointMode, [...points], paint);
+
+      // for (final point in points) {
+      //   TextSpan span = TextSpan(
+      //       style: TextStyle(color: Colors.red), text: point.toString());
+      //   TextPainter tp = TextPainter(
+      //       text: span,
+      //       textAlign: TextAlign.left,
+      //       textDirection: TextDirection.ltr);
+      //   tp.layout();
+      //   tp.paint(canvas, point);
+      // }
     }
   }
 

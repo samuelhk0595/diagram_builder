@@ -31,6 +31,7 @@ class DiagramViewModel extends ValueNotifier {
   }
 
   void stopCursorPath() {
+    paths.add(cursorPath!);
     cursorPath = null;
     notifyListeners();
   }
