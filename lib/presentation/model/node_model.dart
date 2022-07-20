@@ -16,4 +16,10 @@ class NodeModel extends NodeEntity {
       key.currentContext!.findRenderObject() as RenderBox;
 
   Size get widgetSize => _renderBox.size;
+  
+  @override
+  Offset get originPoint => _renderBox.localToGlobal(_renderBox.paintBounds.centerRight);
+  
+  @override
+  Offset get targetPoint =>  _renderBox.localToGlobal(_renderBox.paintBounds.centerLeft);
 }

@@ -5,7 +5,7 @@ import 'package:diagram_builder/utils/path_creator.dart';
 import 'package:flutter/material.dart';
 
 class ArrowPainter extends CustomPainter {
-  ArrowPainter({
+   ArrowPainter({
     required this.paths,
     this.pathCretor,
   });

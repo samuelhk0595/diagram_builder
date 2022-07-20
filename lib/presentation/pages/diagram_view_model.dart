@@ -1,3 +1,5 @@
+import 'package:diagram_builder/presentation/model/node_distance_model.dart';
+import 'package:diagram_builder/presentation/model/node_entity.dart';
 import 'package:diagram_builder/presentation/model/node_model.dart';
 import 'package:diagram_builder/presentation/model/path_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,17 +12,21 @@ class DiagramViewModel extends ValueNotifier {
 
   PathModel? cursorPath;
   Offset cursorPosition = Offset.zero;
+  NodeModel? originNode;
 
   void updateNodePosition({
     required String nodeId,
     required Offset position,
   }) {
-    final node = nodes[nodeId];
-    node!.position = position;
+    nodes[nodeId]!.position = position;
     notifyListeners();
   }
 
-  void startCursorPath(Offset position) {
+  void startCursorPath({
+    required Offset position,
+    required NodeModel originNode,
+  }) {
+    this.originNode = originNode;
     cursorPath = PathModel(origin: position, target: position);
     notifyListeners();
   }
@@ -32,7 +38,22 @@ class DiagramViewModel extends ValueNotifier {
 
   void stopCursorPath() {
     paths.add(cursorPath!);
+
+    final nodeDistances = nodes.values
+        .map((node) => NodeDistanceModel(
+            node: node,
+            distance: node.targetPoint.computeDistance(cursorPath!.target)))
+        .toList();
+    nodeDistances.sort((a, b) => a.distance.compareTo(b.distance));
+    final possibleTargets = nodeDistances
+        .where((element) => element.node.id != originNode!.id)
+        .toList();
+    // final possibleTargets = nodeDistances.where((node) => node.distance < 50);
+    if (possibleTargets.isNotEmpty) {
+      nodes[originNode!.id]!.targetId = possibleTargets.first.node.id;
+    }
     cursorPath = null;
+    originNode = null;
     notifyListeners();
   }
 

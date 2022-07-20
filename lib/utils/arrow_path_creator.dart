@@ -61,6 +61,11 @@ class ArrowPathCreator extends PathCreator {
       return TargetNodePosition.diagonalBottomLeft;
     }
   }
+  
+  @override
+  List<Offset> linkPoints({required Offset origin, required Offset target}) {
+    return [origin,target];
+  }
 }
 
 enum TargetNodePosition {
