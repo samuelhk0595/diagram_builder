@@ -4,9 +4,13 @@ abstract class NodeEntity {
   NodeEntity({
     required this.id,
     required this.position,
+    required this.builder,
+    required this.key,
     this.targetId,
   });
   final String id;
+  final WidgetBuilder builder;
+  final GlobalKey key;
   Offset position;
   String? targetId;
 

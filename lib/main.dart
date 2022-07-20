@@ -34,7 +34,12 @@ class _DiagramPageState extends State<DiagramPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: DiagramBuilder(nodes: nodes),
+      body: DiagramBuilder(nodes: nodes,
+      onNodeLinking: (originNode, targetNode){
+        print(originNode.id);
+        print(targetNode.id);
+      },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: addNode,
         child: const Icon(Icons.add),
@@ -45,6 +50,15 @@ class _DiagramPageState extends State<DiagramPage> {
   void addNode() {
     final key = GlobalKey();
     final node = NodeModel(
+      builder: (context) {
+        return Container(
+          alignment: Alignment.center,
+          width: 100,
+          height: 100,
+          color: Colors.blue,
+          child: Text(key.hashCode.toString()),
+        );
+      },
       key: key,
       id: key.hashCode.toString(),
       position: Offset.zero,

@@ -5,14 +5,17 @@ import 'package:diagram_builder/presentation/model/path_model.dart';
 import 'package:flutter/cupertino.dart';
 
 class DiagramViewModel extends ValueNotifier {
-  DiagramViewModel() : super(0);
+  DiagramViewModel({
+    this.onNodeLinking,
+  }) : super(0);
 
   Map<String, NodeModel> nodes = {};
   List<PathModel> paths = [];
-
   PathModel? cursorPath;
   Offset cursorPosition = Offset.zero;
   NodeModel? originNode;
+
+  void Function(NodeModel originNode, NodeModel targetNode)? onNodeLinking;
 
   void updateNodePosition({
     required String nodeId,
@@ -51,6 +54,9 @@ class DiagramViewModel extends ValueNotifier {
     // final possibleTargets = nodeDistances.where((node) => node.distance < 50);
     if (possibleTargets.isNotEmpty) {
       nodes[originNode!.id]!.targetId = possibleTargets.first.node.id;
+      if (onNodeLinking != null) {
+        onNodeLinking!(nodes[originNode!.id]!, possibleTargets.first.node);
+      }
     }
     cursorPath = null;
     originNode = null;

@@ -4,13 +4,13 @@ import 'node_entity.dart';
 
 class NodeModel extends NodeEntity {
   NodeModel({
-    required this.key,
+    required super.key,
     required super.id,
     required super.position,
+    required super.builder,
     super.targetId,
   });
 
-  final GlobalKey key;
 
   RenderBox get _renderBox =>
       key.currentContext!.findRenderObject() as RenderBox;

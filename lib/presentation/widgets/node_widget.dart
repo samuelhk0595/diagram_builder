@@ -6,11 +6,13 @@ class NodeWidget extends StatelessWidget {
     required this.onDragEnd,
     required this.onDragStart,
     required this.onDragUpdate,
+    required this.builder,
   });
 
   final void Function(DragUpdateDetails details) onDragUpdate;
   final void Function(DragDownDetails details) onDragStart;
   final void Function(DragEndDetails details) onDragEnd;
+  final WidgetBuilder builder;
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +20,7 @@ class NodeWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         defaultDragPoint(const Offset(5, 0)),
-        Container(
-          color: Colors.lightBlue,
-          width: 100,
-          height: 100,
-        ),
+        builder(context),
         GestureDetector(
             onPanDown: onDragStart,
             onPanEnd: onDragEnd,

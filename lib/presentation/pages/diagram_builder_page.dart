@@ -16,23 +16,28 @@ class DiagramBuilder extends StatefulWidget {
     this.width = 1920,
     this.height = 1080,
     this.nodes = const {},
+    this.onNodeLinking,
   }) : super(key: key);
 
   final double width;
   final double height;
   final Map<String, NodeModel> nodes;
+  final void Function(NodeModel originNode, NodeModel targetNode)? onNodeLinking;
 
   @override
   State<DiagramBuilder> createState() => _DiagramBuilderState();
 }
 
 class _DiagramBuilderState extends State<DiagramBuilder> {
-  final viewModel = DiagramViewModel();
+  late final DiagramViewModel viewModel;
   final pathCreator = ArrowPathCreator();
 
   @override
   void initState() {
     super.initState();
+    viewModel = DiagramViewModel(
+      onNodeLinking: widget.onNodeLinking,
+    );
     viewModel.nodes = widget.nodes;
   }
 
@@ -81,6 +86,7 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
                             );
                           },
                           child: NodeWidget(
+                            builder: node.builder,
                             onDragStart: (details) {
                               viewModel.startCursorPath(
                                   originNode: node,
@@ -99,7 +105,6 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
                     }).toList()),
                   ),
                 ),
-             
               ],
             );
           },
