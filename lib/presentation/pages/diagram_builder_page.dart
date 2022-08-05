@@ -85,7 +85,7 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
                                 position: position,
                               );
                             },
-                            child: node.builder(context)
+                            child: node.builder(context, node.linkables)
                             // child: NodeWidget(
                             //   builder: node.builder,
                             //   onDragStart: (details) {

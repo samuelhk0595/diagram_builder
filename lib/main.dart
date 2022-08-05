@@ -1,3 +1,4 @@
+import 'package:diagram_builder/presentation/model/linkable_model.dart';
 import 'package:flutter/material.dart';
 
 import 'presentation/model/node_model.dart';
@@ -52,7 +53,11 @@ class _DiagramPageState extends State<DiagramPage> {
   void addNode() {
     final key = GlobalKey();
     final node = NodeModel(
-      builder: (context) {
+      links: [
+        LinkableModel(id: '1', key: GlobalKey()),
+        LinkableModel(id: '2', key: GlobalKey()),
+      ],
+      builder: (context, linkables) {
         return Container(
           alignment: Alignment.center,
           width: 100,
@@ -61,22 +66,19 @@ class _DiagramPageState extends State<DiagramPage> {
           child: Column(
             children: [
               Text(key.hashCode.toString()),
-              LinkableWidget(
-                  id: 'first',
-                  nodeId: key.hashCode.toString(),
-                  child: Container(
-                    color: Colors.pink,
-                    width: 80,
-                    height: 20,
-                  )),
-              LinkableWidget(
-                  id: 'second',
-                  nodeId: key.hashCode.toString(),
-                  child: Container(
-                    color: Colors.purple,
-                    width: 80,
-                    height: 20,
-                  )),
+              ...linkables
+                  .map<Widget>(
+                    (linkable) => LinkableWidget(
+                        key: linkable.key,
+                        id: linkable.id,
+                        nodeId: key.hashCode.toString(),
+                        child: Container(
+                          color: Colors.pink,
+                          width: 80,
+                          height: 20,
+                        )),
+                  )
+                  .toList()
             ],
           ),
         );

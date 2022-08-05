@@ -27,8 +27,12 @@ class NodeLinkPainter extends CustomPainter {
         final targetNode =
             nodes.singleWhere((node) => node.id == originNode.targetId);
 
+        Offset originPoint = Offset.zero;
+        if(originNode.linkables.isNotEmpty){
+          originPoint = originNode.linkables.last.originPoint;
+        }
         final points = pathCretor?.linkPoints(
-              origin: originNode.originPoint,
+              origin: originPoint,
               target: targetNode.targetPoint,
             ) ??
             [originNode.originPoint, originNode.targetPoint];
