@@ -43,18 +43,27 @@ class _DiagramPageState extends State<DiagramPage> {
           print(targetNode.id);
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: addNode,
-        child: const Icon(Icons.add),
+      floatingActionButton: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            onPressed: addMultilinkingNode,
+            child: const Icon(Icons.add),
+          ),
+          FloatingActionButton(
+            onPressed: addSingleLinkNode,
+            child: const Icon(Icons.add_a_photo),
+          ),
+        ],
       ),
     );
   }
 
-  void addNode() {
+  void addMultilinkingNode() {
     final key = GlobalKey();
     final nodeId = key.hashCode.toString();
     final node = NodeModel(
-      links: [
+      linkables: [
         LinkableModel(
           id: '1',
           key: GlobalKey(),
@@ -89,6 +98,40 @@ class _DiagramPageState extends State<DiagramPage> {
                   )
                   .toList()
             ],
+          ),
+        );
+      },
+      key: key,
+      id: nodeId,
+      position: Offset.zero,
+    );
+    nodes[node.id] = node;
+    setState(() {});
+  }
+
+  addSingleLinkNode() {
+    final key = GlobalKey();
+    final nodeId = key.hashCode.toString();
+    final node = NodeModel(
+      linkables: [
+        LinkableModel(
+          id: '1',
+          key: GlobalKey(),
+          nodeId: nodeId,
+        ),
+      ],
+      builder: (context, linkables) {
+        final linkable = linkables.first;
+        return LinkableWidget(
+          nodeId: linkable.nodeId,
+          id: linkable.id,
+          key: linkable.key,
+          child: Container(
+            alignment: Alignment.center,
+            width: 100,
+            height: 100,
+            color: Colors.blue,
+            child: Text(key.hashCode.toString()),
           ),
         );
       },

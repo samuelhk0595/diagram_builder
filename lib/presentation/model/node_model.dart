@@ -9,8 +9,8 @@ class NodeModel extends NodeEntity {
     required super.id,
     required super.position,
     required super.builder,
-    required List<LinkableModel> links,
-  }) : super(linkables: links);
+    required List<LinkableModel> linkables,
+  }) : super(linkables: linkables);
 
   RenderBox get _renderBox =>
       key.currentContext!.findRenderObject() as RenderBox;
