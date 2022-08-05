@@ -79,32 +79,29 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
                         offset: node.position,
                         key: node.key,
                         child: NodeGestureHandler(
-                          onDragUpdate: (position) {
-                            viewModel.updateNodePosition(
-                              nodeId: node.id,
-                              position: position,
-                            );
-                          },
-                          child: LinkableWidget(
-                            node: node,
-                            builder: node.builder,
-                          ),
-                          // child: NodeWidget(
-                          //   builder: node.builder,
-                          //   onDragStart: (details) {
-                          //     viewModel.startCursorPath(
-                          //         originNode: node,
-                          //         position: details.globalPosition);
-                          //   },
-                          //   onDragUpdate: (details) {
-                          //     viewModel
-                          //         .updateCursorPath(details.globalPosition);
-                          //   },
-                          //   onDragEnd: (details) {
-                          //     viewModel.stopCursorPath();
-                          //   },
-                          // ),
-                        ),
+                            onDragUpdate: (position) {
+                              viewModel.updateNodePosition(
+                                nodeId: node.id,
+                                position: position,
+                              );
+                            },
+                            child: node.builder(context)
+                            // child: NodeWidget(
+                            //   builder: node.builder,
+                            //   onDragStart: (details) {
+                            //     viewModel.startCursorPath(
+                            //         originNode: node,
+                            //         position: details.globalPosition);
+                            //   },
+                            //   onDragUpdate: (details) {
+                            //     viewModel
+                            //         .updateCursorPath(details.globalPosition);
+                            //   },
+                            //   onDragEnd: (details) {
+                            //     viewModel.stopCursorPath();
+                            //   },
+                            // ),
+                            ),
                       );
                     }).toList()),
                   ),

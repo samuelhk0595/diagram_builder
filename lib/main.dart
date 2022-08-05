@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'presentation/model/node_model.dart';
 import 'presentation/pages/diagram_builder_page.dart';
+import 'presentation/widgets/linkable_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,11 +35,12 @@ class _DiagramPageState extends State<DiagramPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: DiagramBuilder(nodes: nodes,
-      onNodeLinking: (originNode, targetNode){
-        print(originNode.id);
-        print(targetNode.id);
-      },
+      body: DiagramBuilder(
+        nodes: nodes,
+        onNodeLinking: (originNode, targetNode) {
+          print(originNode.id);
+          print(targetNode.id);
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: addNode,
@@ -56,7 +58,27 @@ class _DiagramPageState extends State<DiagramPage> {
           width: 100,
           height: 100,
           color: Colors.blue,
-          child: Text(key.hashCode.toString()),
+          child: Column(
+            children: [
+              Text(key.hashCode.toString()),
+              LinkableWidget(
+                  id: 'first',
+                  nodeId: key.hashCode.toString(),
+                  child: Container(
+                    color: Colors.pink,
+                    width: 80,
+                    height: 20,
+                  )),
+              LinkableWidget(
+                  id: 'second',
+                  nodeId: key.hashCode.toString(),
+                  child: Container(
+                    color: Colors.purple,
+                    width: 80,
+                    height: 20,
+                  )),
+            ],
+          ),
         );
       },
       key: key,

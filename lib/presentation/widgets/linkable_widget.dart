@@ -1,16 +1,17 @@
-import 'package:diagram_builder/diagram_builder.dart';
 import 'package:diagram_builder/presentation/pages/diagram_view_model.dart';
 import 'package:flutter/material.dart';
 
 class LinkableWidget extends StatelessWidget {
   const LinkableWidget({
     super.key,
-    required this.node,
-    required this.builder,
+    required this.nodeId,
+    required this.child,
+    required this.id,
   });
 
-  final NodeModel node;
-  final WidgetBuilder builder;
+  final String id;
+  final String nodeId;
+  final Widget child;
 
   DiagramViewModel get viewModel => DiagramViewModel.instance;
 
@@ -19,11 +20,11 @@ class LinkableWidget extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        builder(context),
+        child,
         GestureDetector(
             onPanDown: (details) {
               viewModel.startCursorPath(
-                  originNode: node, position: details.globalPosition);
+                  nodeId: nodeId, position: details.globalPosition);
             },
             onPanUpdate: (details) {
               viewModel.updateCursorPath(details.globalPosition);
@@ -31,7 +32,7 @@ class LinkableWidget extends StatelessWidget {
             onPanEnd: (details) {
               viewModel.stopCursorPath();
             },
-            child: defaultDragPoint(const Offset(-10, 0))),
+            child: defaultDragPoint(const Offset(-0, 0))),
       ],
     );
   }

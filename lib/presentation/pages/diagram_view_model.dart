@@ -31,9 +31,9 @@ class DiagramViewModel extends ValueNotifier {
 
   void startCursorPath({
     required Offset position,
-    required NodeModel originNode,
+    required String  nodeId,
   }) {
-    this.originNode = originNode;
+    originNode = nodes[nodeId];
     cursorPath = PathModel(origin: position, target: position);
     notifyListeners();
   }
