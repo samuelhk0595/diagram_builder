@@ -52,10 +52,19 @@ class _DiagramPageState extends State<DiagramPage> {
 
   void addNode() {
     final key = GlobalKey();
+    final nodeId = key.hashCode.toString();
     final node = NodeModel(
       links: [
-        LinkableModel(id: '1', key: GlobalKey()),
-        LinkableModel(id: '2', key: GlobalKey()),
+        LinkableModel(
+          id: '1',
+          key: GlobalKey(),
+          nodeId: nodeId,
+        ),
+        LinkableModel(
+          id: '2',
+          key: GlobalKey(),
+          nodeId: nodeId,
+        ),
       ],
       builder: (context, linkables) {
         return Container(
@@ -84,7 +93,7 @@ class _DiagramPageState extends State<DiagramPage> {
         );
       },
       key: key,
-      id: key.hashCode.toString(),
+      id: nodeId,
       position: Offset.zero,
     );
     nodes[node.id] = node;

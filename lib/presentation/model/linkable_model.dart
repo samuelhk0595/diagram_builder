@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:diagram_builder/presentation/model/linkable_entity.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +5,8 @@ class LinkableModel extends LinkableEntity {
   LinkableModel({
     required super.id,
     required super.key,
+    required super.nodeId,
+    super.targetNodeId,
   });
 
   RenderBox get _renderBox =>

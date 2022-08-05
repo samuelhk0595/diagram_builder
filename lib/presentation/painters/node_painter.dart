@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:ui' as ui;
 
 import 'package:diagram_builder/presentation/model/node_model.dart';
@@ -23,21 +24,20 @@ class NodeLinkPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     for (final originNode in nodes) {
-      if (originNode.targetId != null) {
-        final targetNode =
-            nodes.singleWhere((node) => node.id == originNode.targetId);
+      for (final linkable in originNode.linkables) {
+        if (linkable.targetNodeId != null) {
+          final targetNode =
+              nodes.singleWhere((node) => node.id == linkable.targetNodeId);
 
-        Offset originPoint = Offset.zero;
-        if(originNode.linkables.isNotEmpty){
-          originPoint = originNode.linkables.last.originPoint;
+          final originPoint = linkable.originPoint;
+          final points = pathCretor?.linkPoints(
+                origin: originPoint,
+                target: targetNode.targetPoint,
+              ) ??
+              [originNode.originPoint, originNode.targetPoint];
+
+          canvas.drawPoints(pointMode, [...points], paint);
         }
-        final points = pathCretor?.linkPoints(
-              origin: originPoint,
-              target: targetNode.targetPoint,
-            ) ??
-            [originNode.originPoint, originNode.targetPoint];
-
-        canvas.drawPoints(pointMode, [...points], paint);
       }
     }
   }

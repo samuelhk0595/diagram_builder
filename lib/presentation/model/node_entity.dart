@@ -8,7 +8,6 @@ abstract class NodeEntity {
     required this.builder,
     required this.key,
     required this.linkables,
-    this.targetId,
   });
   final String id;
   final Widget Function(BuildContext context, List<LinkableEntity> linkables)
@@ -16,7 +15,7 @@ abstract class NodeEntity {
   final GlobalKey key;
   List<LinkableEntity> linkables;
   Offset position;
-  String? targetId;
+  
 
   Offset get targetPoint;
   Offset get originPoint;

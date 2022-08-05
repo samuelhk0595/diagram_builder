@@ -10,7 +10,6 @@ class NodeModel extends NodeEntity {
     required super.position,
     required super.builder,
     required List<LinkableModel> links,
-    super.targetId,
   }) : super(linkables: links);
 
   RenderBox get _renderBox =>

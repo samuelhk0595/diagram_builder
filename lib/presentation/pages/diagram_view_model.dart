@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:diagram_builder/presentation/model/linkable_model.dart';
 import 'package:diagram_builder/presentation/model/node_distance_model.dart';
 import 'package:diagram_builder/presentation/model/node_entity.dart';
 import 'package:diagram_builder/presentation/model/node_model.dart';
@@ -17,7 +20,8 @@ class DiagramViewModel extends ValueNotifier {
   List<PathModel> paths = [];
   PathModel? cursorPath;
   Offset cursorPosition = Offset.zero;
-  NodeModel? originNode;
+  // NodeModel? originNode;
+  LinkableModel? currentLink;
 
   void Function(NodeModel originNode, NodeModel targetNode)? onNodeLinking;
 
@@ -31,9 +35,12 @@ class DiagramViewModel extends ValueNotifier {
 
   void startCursorPath({
     required Offset position,
-    required String  nodeId,
+    required String nodeId,
+    required String linkableId,
   }) {
-    originNode = nodes[nodeId];
+    final originNode = nodes[nodeId];
+    currentLink = originNode!.linkables
+        .singleWhere((element) => element.id == linkableId) as LinkableModel;
     cursorPath = PathModel(origin: position, target: position);
     notifyListeners();
   }
@@ -45,7 +52,7 @@ class DiagramViewModel extends ValueNotifier {
 
   void stopCursorPath() {
     paths.add(cursorPath!);
-
+    final originNode = nodes[currentLink!.nodeId];
     final nodeDistances = nodes.values
         .map((node) => NodeDistanceModel(
             node: node,
@@ -57,13 +64,18 @@ class DiagramViewModel extends ValueNotifier {
         .toList();
     // final possibleTargets = nodeDistances.where((node) => node.distance < 50);
     if (possibleTargets.isNotEmpty) {
-      nodes[originNode!.id]!.targetId = possibleTargets.first.node.id;
+      final linkableIndex = originNode!.linkables
+          .indexWhere((element) => element.id == currentLink!.id);
+
+      originNode.linkables[linkableIndex].targetNodeId =
+          possibleTargets.first.node.id;
+
       if (onNodeLinking != null) {
-        onNodeLinking!(nodes[originNode!.id]!, possibleTargets.first.node);
+        onNodeLinking!(nodes[originNode.id]!, possibleTargets.first.node);
       }
     }
     cursorPath = null;
-    originNode = null;
+    currentLink = null;
     notifyListeners();
   }
 

@@ -24,7 +24,10 @@ class LinkableWidget extends StatelessWidget {
         GestureDetector(
             onPanDown: (details) {
               viewModel.startCursorPath(
-                  nodeId: nodeId, position: details.globalPosition);
+                nodeId: nodeId,
+                position: details.globalPosition,
+                linkableId: id,
+              );
             },
             onPanUpdate: (details) {
               viewModel.updateCursorPath(details.globalPosition);
