@@ -5,9 +5,13 @@ import 'package:diagram_builder/presentation/model/path_model.dart';
 import 'package:flutter/cupertino.dart';
 
 class DiagramViewModel extends ValueNotifier {
-  DiagramViewModel({
-    this.onNodeLinking,
-  }) : super(0);
+  factory DiagramViewModel() {
+    return instance;
+  }
+
+  DiagramViewModel._internal() : super(0);
+
+  static final instance = DiagramViewModel._internal();
 
   Map<String, NodeModel> nodes = {};
   List<PathModel> paths = [];

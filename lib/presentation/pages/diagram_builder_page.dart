@@ -9,6 +9,7 @@ import 'package:diagram_builder/utils/arrow_path_creator.dart';
 import 'package:flutter/material.dart';
 
 import '../model/node_model.dart';
+import '../widgets/linkable_widget.dart';
 
 class DiagramBuilder extends StatefulWidget {
   const DiagramBuilder({
@@ -22,24 +23,23 @@ class DiagramBuilder extends StatefulWidget {
   final double width;
   final double height;
   final Map<String, NodeModel> nodes;
-  final void Function(NodeModel originNode, NodeModel targetNode)? onNodeLinking;
+  final void Function(NodeModel originNode, NodeModel targetNode)?
+      onNodeLinking;
 
   @override
   State<DiagramBuilder> createState() => _DiagramBuilderState();
 }
 
 class _DiagramBuilderState extends State<DiagramBuilder> {
-  late final DiagramViewModel viewModel;
-  final pathCreator = ArrowPathCreator();
-
   @override
   void initState() {
     super.initState();
-    viewModel = DiagramViewModel(
-      onNodeLinking: widget.onNodeLinking,
-    );
     viewModel.nodes = widget.nodes;
+    viewModel.onNodeLinking = widget.onNodeLinking;
   }
+
+  final pathCreator = ArrowPathCreator();
+  DiagramViewModel get viewModel => DiagramViewModel.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -85,21 +85,25 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
                               position: position,
                             );
                           },
-                          child: NodeWidget(
+                          child: LinkableWidget(
+                            node: node,
                             builder: node.builder,
-                            onDragStart: (details) {
-                              viewModel.startCursorPath(
-                                  originNode: node,
-                                  position: details.globalPosition);
-                            },
-                            onDragUpdate: (details) {
-                              viewModel
-                                  .updateCursorPath(details.globalPosition);
-                            },
-                            onDragEnd: (details) {
-                              viewModel.stopCursorPath();
-                            },
                           ),
+                          // child: NodeWidget(
+                          //   builder: node.builder,
+                          //   onDragStart: (details) {
+                          //     viewModel.startCursorPath(
+                          //         originNode: node,
+                          //         position: details.globalPosition);
+                          //   },
+                          //   onDragUpdate: (details) {
+                          //     viewModel
+                          //         .updateCursorPath(details.globalPosition);
+                          //   },
+                          //   onDragEnd: (details) {
+                          //     viewModel.stopCursorPath();
+                          //   },
+                          // ),
                         ),
                       );
                     }).toList()),
