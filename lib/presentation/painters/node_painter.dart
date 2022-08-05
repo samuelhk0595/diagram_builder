@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:ui' as ui;
 
 import 'package:diagram_builder/presentation/model/node_model.dart';
@@ -19,8 +18,8 @@ class NodeLinkPainter extends CustomPainter {
     if (nodes.isEmpty) return;
     const pointMode = ui.PointMode.polygon;
     final paint = Paint()
-      ..color = Colors.black
-      ..strokeWidth = 1
+      ..color = const Color(0xff79D594)
+      ..strokeWidth = 2.5
       ..strokeCap = StrokeCap.round;
 
     for (final originNode in nodes) {
@@ -37,9 +36,25 @@ class NodeLinkPainter extends CustomPainter {
               [originNode.originPoint, originNode.targetPoint];
 
           canvas.drawPoints(pointMode, [...points], paint);
+
+          final arrowPath = buildArrowPath(targetNode.targetPoint);
+          canvas.drawPath(arrowPath, paint);
         }
       }
     }
+  }
+
+  Path buildArrowPath(Offset arrowheadPosition) {
+    arrowheadPosition = arrowheadPosition.translate(2, 0);
+    final path = Path();
+    path.moveTo(arrowheadPosition.dx, arrowheadPosition.dy);
+    path.lineTo(arrowheadPosition.dx - 20, arrowheadPosition.dy - 7);
+    path.quadraticBezierTo(arrowheadPosition.dx -15, arrowheadPosition.dy,
+    arrowheadPosition.dx - 20, arrowheadPosition.dy + 7,
+    );
+    path.lineTo(arrowheadPosition.dx, arrowheadPosition.dy);
+    path.close();
+    return path;
   }
 
   @override
