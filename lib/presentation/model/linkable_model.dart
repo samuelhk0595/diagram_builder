@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 class LinkableModel extends LinkableEntity {
   LinkableModel({
     required super.id,
-    required super.key,
     required super.nodeId,
     super.targetNodeId,
-  });
+  }) : super(key: GlobalKey());
 
   RenderBox get _renderBox =>
       key.currentContext!.findRenderObject() as RenderBox;

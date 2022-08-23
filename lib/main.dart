@@ -60,18 +60,15 @@ class _DiagramPageState extends State<DiagramPage> {
   }
 
   void addMultilinkingNode() {
-    final key = GlobalKey();
-    final nodeId = key.hashCode.toString();
+    final nodeId = DateTime.now().toString();
     final node = NodeModel(
       linkables: [
         LinkableModel(
           id: '1',
-          key: GlobalKey(),
           nodeId: nodeId,
         ),
         LinkableModel(
           id: '2',
-          key: GlobalKey(),
           nodeId: nodeId,
         ),
       ],
@@ -83,13 +80,12 @@ class _DiagramPageState extends State<DiagramPage> {
           color: Colors.blue,
           child: Column(
             children: [
-              Text(key.hashCode.toString()),
+              Text(nodeId),
               ...linkables
                   .map<Widget>(
                     (linkable) => LinkableWidget(
                         key: linkable.key,
-                        id: linkable.id,
-                        nodeId: key.hashCode.toString(),
+                        data: linkable as LinkableModel,
                         child: Container(
                           color: Colors.pink,
                           width: 80,
@@ -101,7 +97,6 @@ class _DiagramPageState extends State<DiagramPage> {
           ),
         );
       },
-      key: key,
       id: nodeId,
       position: Offset.zero,
     );
@@ -110,32 +105,28 @@ class _DiagramPageState extends State<DiagramPage> {
   }
 
   addSingleLinkNode() {
-    final key = GlobalKey();
-    final nodeId = key.hashCode.toString();
+    final nodeId = DateTime.now().toString();
     final node = NodeModel(
       linkables: [
         LinkableModel(
           id: '1',
-          key: GlobalKey(),
           nodeId: nodeId,
         ),
       ],
       builder: (context, linkables) {
         final linkable = linkables.first;
         return LinkableWidget(
-          nodeId: linkable.nodeId,
-          id: linkable.id,
+          data: linkable as LinkableModel,
           key: linkable.key,
           child: Container(
             alignment: Alignment.center,
             width: 100,
             height: 100,
             color: Colors.blue,
-            child: Text(key.hashCode.toString()),
+            child: Text(nodeId),
           ),
         );
       },
-      key: key,
       id: nodeId,
       position: Offset.zero,
     );

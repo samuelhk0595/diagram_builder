@@ -5,12 +5,11 @@ import 'node_entity.dart';
 
 class NodeModel extends NodeEntity {
   NodeModel({
-    required super.key,
     required super.id,
     required super.position,
     required super.builder,
     required List<LinkableModel> linkables,
-  }) : super(linkables: linkables);
+  }) : super(linkables: linkables, key: GlobalKey());
 
   RenderBox get _renderBox =>
       key.currentContext!.findRenderObject() as RenderBox;
