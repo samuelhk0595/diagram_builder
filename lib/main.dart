@@ -1,3 +1,4 @@
+import 'package:diagram_builder/diagram_factory_demo.dart';
 import 'package:diagram_builder/presentation/model/linkable_model.dart';
 import 'package:flutter/material.dart';
 
@@ -15,11 +16,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const DiagramPage());
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      // home: const DiagramPage(),
+      home: const DiagramFactoryDemoPage(),
+    );
   }
 }
 
