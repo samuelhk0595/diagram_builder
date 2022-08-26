@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: const DiagramPage(),
-      home: const DiagramFactoryDemoPage(),
+      home: const DiagramPage(),
+      // home: const DiagramFactoryDemoPage(),
     );
   }
 }
