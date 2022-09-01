@@ -5,7 +5,7 @@ import 'package:diagram_builder/utils/path_creator.dart';
 import 'package:flutter/material.dart';
 
 class ArrowPainter extends CustomPainter {
-   ArrowPainter({
+  ArrowPainter({
     required this.paths,
     this.pathCretor,
   });
@@ -18,14 +18,13 @@ class ArrowPainter extends CustomPainter {
     if (paths.isEmpty) return;
     const pointMode = ui.PointMode.polygon;
     final paint = Paint()
-      ..color = Colors.black
-      ..strokeWidth = 1
+      ..color = const Color(0xff79D594)
+      ..strokeWidth = 2.5
       ..strokeCap = StrokeCap.round;
 
     for (final path in paths) {
       final points =
           pathCretor?.generatePoints(path) ?? [path.origin, path.target];
-
 
       canvas.drawPoints(pointMode, [...points], paint);
 

@@ -1,3 +1,4 @@
+import 'package:diagram_builder/presentation/model/linkable_entity.dart';
 import 'package:flutter/cupertino.dart';
 
 abstract class NodeEntity {
@@ -6,13 +7,15 @@ abstract class NodeEntity {
     required this.position,
     required this.builder,
     required this.key,
-    this.targetId,
+    required this.linkables,
   });
   final String id;
-  final WidgetBuilder builder;
+  final Widget Function(BuildContext context, List<LinkableEntity> linkables)
+      builder;
   final GlobalKey key;
+  List<LinkableEntity> linkables;
   Offset position;
-  String? targetId;
+  
 
   Offset get targetPoint;
   Offset get originPoint;

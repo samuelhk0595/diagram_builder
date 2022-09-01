@@ -1,3 +1,6 @@
+import 'package:diagram_builder/diagram_factory_demo.dart';
+import 'package:diagram_builder/presentation/model/linkable_model.dart';
+import 'package:diagram_builder/presentation/widgets/diagram_overlay.dart';
 import 'package:flutter/material.dart';
 
 import 'presentation/model/node_model.dart';
@@ -14,11 +17,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const DiagramPage());
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const DiagramPage(),
+      // home: const DiagramFactoryDemoPage(),
+    );
   }
 }
 
@@ -31,28 +36,55 @@ class DiagramPage extends StatefulWidget {
 
 class _DiagramPageState extends State<DiagramPage> {
   Map<String, NodeModel> nodes = {};
+  List<DiagramOverlay> overlays = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: DiagramBuilder(
         nodes: nodes,
+        overlays: overlays,
         onNodeLinking: (originNode, targetNode) {
           print(originNode.id);
           print(targetNode.id);
         },
+        onNodePositionUpdate: (node) {
+          print('${node.id}  ${node.position}');
+        },
+        onPointerReleaseWithoutLinking: (position) {
+          addOverlay(position);
+        },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: addNode,
-        child: const Icon(Icons.add),
+      floatingActionButton: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            onPressed: addMultilinkingNode,
+            child: const Icon(Icons.add),
+          ),
+          FloatingActionButton(
+            onPressed: addSingleLinkNode,
+            child: const Icon(Icons.add_a_photo),
+          ),
+        ],
       ),
     );
   }
 
-  void addNode() {
-    final key = GlobalKey();
+  void addMultilinkingNode() {
+    final nodeId = DateTime.now().toString();
     final node = NodeModel(
-      builder: (context) {
+      linkables: [
+        LinkableModel(
+          id: '1',
+          nodeId: nodeId,
+        ),
+        LinkableModel(
+          id: '2',
+          nodeId: nodeId,
+        ),
+      ],
+      builder: (context, linkables) {
         return Container(
           alignment: Alignment.center,
           width: 100,
@@ -60,32 +92,77 @@ class _DiagramPageState extends State<DiagramPage> {
           color: Colors.blue,
           child: Column(
             children: [
-              Text(key.hashCode.toString()),
-              LinkableWidget(
-                  id: 'first',
-                  nodeId: key.hashCode.toString(),
-                  child: Container(
-                    color: Colors.pink,
-                    width: 80,
-                    height: 20,
-                  )),
-              LinkableWidget(
-                  id: 'second',
-                  nodeId: key.hashCode.toString(),
-                  child: Container(
-                    color: Colors.purple,
-                    width: 80,
-                    height: 20,
-                  )),
+              Text(nodeId),
+              ...linkables
+                  .map<Widget>(
+                    (linkable) => LinkableWidget(
+                        key: linkable.key,
+                        data: linkable as LinkableModel,
+                        child: Container(
+                          color: Colors.pink,
+                          width: 80,
+                          height: 20,
+                        )),
+                  )
+                  .toList()
             ],
           ),
         );
       },
-      key: key,
-      id: key.hashCode.toString(),
+      id: nodeId,
       position: Offset.zero,
     );
     nodes[node.id] = node;
+    setState(() {});
+  }
+
+  addSingleLinkNode() {
+    final nodeId = DateTime.now().toString();
+    final node = NodeModel(
+      linkables: [
+        LinkableModel(
+          id: '1',
+          nodeId: nodeId,
+        ),
+      ],
+      builder: (context, linkables) {
+        final linkable = linkables.first;
+        return LinkableWidget(
+          data: linkable as LinkableModel,
+          key: linkable.key,
+          child: Container(
+            alignment: Alignment.center,
+            width: 100,
+            height: 100,
+            color: Colors.blue,
+            child: Text(nodeId),
+          ),
+        );
+      },
+      id: nodeId,
+      position: Offset.zero,
+    );
+    nodes[node.id] = node;
+    setState(() {});
+  }
+
+  addOverlay(Offset position) {
+    final overlay = DiagramOverlay(
+        builder: (context) {
+          return InkWell(
+              onTap: () {
+                overlays.clear();
+                setState(() {});
+              },
+              child: Card(
+                color: Colors.blue,
+                elevation: 10.0,
+                child: Container(width: 200, height: 300),
+              ));
+        },
+        position: position);
+
+    overlays.add(overlay);
     setState(() {});
   }
 }

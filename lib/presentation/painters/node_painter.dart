@@ -18,24 +18,43 @@ class NodeLinkPainter extends CustomPainter {
     if (nodes.isEmpty) return;
     const pointMode = ui.PointMode.polygon;
     final paint = Paint()
-      ..color = Colors.black
-      ..strokeWidth = 1
+      ..color = const Color(0xff79D594)
+      ..strokeWidth = 2.5
       ..strokeCap = StrokeCap.round;
 
     for (final originNode in nodes) {
-      if (originNode.targetId != null) {
-        final targetNode =
-            nodes.singleWhere((node) => node.id == originNode.targetId);
+      for (final linkable in originNode.linkables) {
+        if (linkable.targetNodeId != null) {
+          final targetNode =
+              nodes.singleWhere((node) => node.id == linkable.targetNodeId);
 
-        final points = pathCretor?.linkPoints(
-              origin: originNode.originPoint,
-              target: targetNode.targetPoint,
-            ) ??
-            [originNode.originPoint, originNode.targetPoint];
+          final originPoint = linkable.originPoint;
+          final points = pathCretor?.linkPoints(
+                origin: originPoint,
+                target: targetNode.targetPoint,
+              ) ??
+              [originNode.originPoint, originNode.targetPoint];
 
-        canvas.drawPoints(pointMode, [...points], paint);
+          canvas.drawPoints(pointMode, [...points], paint);
+
+          final arrowPath = buildArrowPath(targetNode.targetPoint);
+          canvas.drawPath(arrowPath, paint);
+        }
       }
     }
+  }
+
+  Path buildArrowPath(Offset arrowheadPosition) {
+    arrowheadPosition = arrowheadPosition.translate(2, 0);
+    final path = Path();
+    path.moveTo(arrowheadPosition.dx, arrowheadPosition.dy);
+    path.lineTo(arrowheadPosition.dx - 20, arrowheadPosition.dy - 7);
+    path.quadraticBezierTo(arrowheadPosition.dx -15, arrowheadPosition.dy,
+    arrowheadPosition.dx - 20, arrowheadPosition.dy + 7,
+    );
+    path.lineTo(arrowheadPosition.dx, arrowheadPosition.dy);
+    path.close();
+    return path;
   }
 
   @override
