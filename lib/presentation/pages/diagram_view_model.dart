@@ -24,6 +24,7 @@ class DiagramViewModel extends ValueNotifier {
   LinkableModel? currentLink;
 
   void Function(NodeModel originNode, NodeModel targetNode)? onNodeLinking;
+  void Function(Offset position)? onPointerReleaseWithoutLinking;
 
   void updateNodePosition({
     required String nodeId,
@@ -73,6 +74,9 @@ class DiagramViewModel extends ValueNotifier {
       if (onNodeLinking != null) {
         onNodeLinking!(nodes[originNode.id]!, possibleTargets.first.node);
       }
+    }
+    if (onPointerReleaseWithoutLinking != null) {
+      onPointerReleaseWithoutLinking!(cursorPath!.target);
     }
     cursorPath = null;
     currentLink = null;
