@@ -5,12 +5,10 @@ import 'package:diagram_builder/presentation/painters/arrow_painter.dart';
 import 'package:diagram_builder/presentation/painters/node_painter.dart';
 import 'package:diagram_builder/presentation/widgets/node_gesture_handler.dart';
 import 'package:diagram_builder/presentation/widgets/node_positioner.dart';
-import 'package:diagram_builder/presentation/widgets/node_widget.dart';
 import 'package:diagram_builder/utils/arrow_path_creator.dart';
 import 'package:flutter/material.dart';
 
 import '../model/node_model.dart';
-import '../widgets/linkable_widget.dart';
 
 class DiagramBuilder<T> extends StatefulWidget {
   const DiagramBuilder({
@@ -19,6 +17,7 @@ class DiagramBuilder<T> extends StatefulWidget {
     this.height = 1080,
     this.nodes = const {},
     this.onNodeLinking,
+    this.onNodePositionUpdate,
   })  : factories = const [],
         items = const [],
         _isOnFactoryMode = false,
@@ -31,6 +30,7 @@ class DiagramBuilder<T> extends StatefulWidget {
     this.onNodeLinking,
     required this.factories,
     required this.items,
+    this.onNodePositionUpdate,
   })  : nodes = const {},
         _isOnFactoryMode = true,
         super(key: key);
@@ -44,6 +44,9 @@ class DiagramBuilder<T> extends StatefulWidget {
   final Map<String, NodeModel> nodes;
   final void Function(NodeModel originNode, NodeModel targetNode)?
       onNodeLinking;
+  final void Function(
+    NodeModel originNode,
+  )? onNodePositionUpdate;
 
   @override
   State<DiagramBuilder> createState() => _DiagramBuilderState();
@@ -116,6 +119,9 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
                                 nodeId: node.id,
                                 position: position,
                               );
+                              if (widget.onNodePositionUpdate != null) {
+                                widget.onNodePositionUpdate!(node);
+                              }
                             },
                             child: node.builder(context, node.linkables)
                             // child: NodeWidget(

@@ -45,6 +45,9 @@ class _DiagramPageState extends State<DiagramPage> {
           print(originNode.id);
           print(targetNode.id);
         },
+        onNodePositionUpdate: (node){
+          print('${node.id}  ${node.position}');
+        },
       ),
       floatingActionButton: Row(
         mainAxisSize: MainAxisSize.min,
