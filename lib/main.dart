@@ -1,5 +1,6 @@
 import 'package:diagram_builder/diagram_factory_demo.dart';
 import 'package:diagram_builder/presentation/model/linkable_model.dart';
+import 'package:diagram_builder/presentation/widgets/diagram_overlay.dart';
 import 'package:flutter/material.dart';
 
 import 'presentation/model/node_model.dart';
@@ -35,18 +36,23 @@ class DiagramPage extends StatefulWidget {
 
 class _DiagramPageState extends State<DiagramPage> {
   Map<String, NodeModel> nodes = {};
+  List<DiagramOverlay> overlays = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: DiagramBuilder(
         nodes: nodes,
+        overlays: overlays,
         onNodeLinking: (originNode, targetNode) {
           print(originNode.id);
           print(targetNode.id);
         },
-        onNodePositionUpdate: (node){
+        onNodePositionUpdate: (node) {
           print('${node.id}  ${node.position}');
+        },
+        onPointerReleaseWithoutLinking: (position) {
+          addOverlay(position);
         },
       ),
       floatingActionButton: Row(
@@ -137,6 +143,26 @@ class _DiagramPageState extends State<DiagramPage> {
       position: Offset.zero,
     );
     nodes[node.id] = node;
+    setState(() {});
+  }
+
+  addOverlay(Offset position) {
+    final overlay = DiagramOverlay(
+        builder: (context) {
+          return InkWell(
+              onTap: () {
+                overlays.clear();
+                setState(() {});
+              },
+              child: Card(
+                color: Colors.blue,
+                elevation: 10.0,
+                child: Container(width: 200, height: 300),
+              ));
+        },
+        position: position);
+
+    overlays.add(overlay);
     setState(() {});
   }
 }

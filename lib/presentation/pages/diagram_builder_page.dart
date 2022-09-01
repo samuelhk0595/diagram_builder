@@ -8,8 +8,6 @@ import 'package:diagram_builder/presentation/widgets/node_positioner.dart';
 import 'package:diagram_builder/utils/arrow_path_creator.dart';
 import 'package:flutter/material.dart';
 
-import '../model/node_model.dart';
-
 class DiagramBuilder<T> extends StatefulWidget {
   const DiagramBuilder({
     Key? key,
@@ -18,6 +16,8 @@ class DiagramBuilder<T> extends StatefulWidget {
     this.nodes = const {},
     this.onNodeLinking,
     this.onNodePositionUpdate,
+    this.onPointerReleaseWithoutLinking,
+    this.overlays,
   })  : factories = const [],
         items = const [],
         _isOnFactoryMode = false,
@@ -31,6 +31,8 @@ class DiagramBuilder<T> extends StatefulWidget {
     required this.factories,
     required this.items,
     this.onNodePositionUpdate,
+    this.onPointerReleaseWithoutLinking,
+    this.overlays,
   })  : nodes = const {},
         _isOnFactoryMode = true,
         super(key: key);
@@ -47,6 +49,9 @@ class DiagramBuilder<T> extends StatefulWidget {
   final void Function(
     NodeModel originNode,
   )? onNodePositionUpdate;
+
+  final void Function(Offset position)? onPointerReleaseWithoutLinking;
+  final List<DiagramOverlay>? overlays;
 
   @override
   State<DiagramBuilder> createState() => _DiagramBuilderState();
@@ -70,6 +75,8 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
     } else {
       viewModel.nodes = widget.nodes;
       viewModel.onNodeLinking = widget.onNodeLinking;
+      viewModel.onPointerReleaseWithoutLinking =
+          widget.onPointerReleaseWithoutLinking;
     }
   }
 
@@ -123,27 +130,19 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
                                 widget.onNodePositionUpdate!(node);
                               }
                             },
-                            child: node.builder(context, node.linkables)
-                            // child: NodeWidget(
-                            //   builder: node.builder,
-                            //   onDragStart: (details) {
-                            //     viewModel.startCursorPath(
-                            //         originNode: node,
-                            //         position: details.globalPosition);
-                            //   },
-                            //   onDragUpdate: (details) {
-                            //     viewModel
-                            //         .updateCursorPath(details.globalPosition);
-                            //   },
-                            //   onDragEnd: (details) {
-                            //     viewModel.stopCursorPath();
-                            //   },
-                            // ),
-                            ),
+                            child: node.builder(context, node.linkables)),
                       );
                     }).toList()),
                   ),
                 ),
+                if (widget.overlays != null)
+                  ...widget.overlays!.map<Widget>((overlay) {
+                    return Positioned(
+                      left: overlay.position.dx,
+                      top: overlay.position.dy,
+                      child: overlay.builder(context),
+                    );
+                  }).toList(),
               ],
             );
           },
