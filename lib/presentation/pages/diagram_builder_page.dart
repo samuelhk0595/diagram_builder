@@ -18,6 +18,7 @@ class DiagramBuilder<T> extends StatefulWidget {
     this.onNodePositionUpdate,
     this.onPointerReleaseWithoutLinking,
     this.overlays,
+    this.onCreated,
   })  : factories = const [],
         items = const [],
         _isOnFactoryMode = false,
@@ -33,6 +34,7 @@ class DiagramBuilder<T> extends StatefulWidget {
     this.onNodePositionUpdate,
     this.onPointerReleaseWithoutLinking,
     this.overlays,
+    this.onCreated,
   })  : nodes = const {},
         _isOnFactoryMode = true,
         super(key: key);
@@ -50,8 +52,10 @@ class DiagramBuilder<T> extends StatefulWidget {
     NodeModel originNode,
   )? onNodePositionUpdate;
 
-  final void Function(Offset position)? onPointerReleaseWithoutLinking;
+final void Function(NodeModel originNode, String linkableId, Offset position)?
+      onPointerReleaseWithoutLinking;
   final List<DiagramOverlay>? overlays;
+  final void Function(DiagramController controller)? onCreated;
 
   @override
   State<DiagramBuilder> createState() => _DiagramBuilderState();
@@ -78,6 +82,12 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
       viewModel.onPointerReleaseWithoutLinking =
           widget.onPointerReleaseWithoutLinking;
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (widget.onCreated != null) {
+        widget.onCreated!(DiagramController.create(viewModel));
+      }
+    });
   }
 
   final pathCreator = ArrowPathCreator();

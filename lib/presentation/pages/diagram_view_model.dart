@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:diagram_builder/presentation/model/linkable_model.dart';
 import 'package:diagram_builder/presentation/model/node_distance_model.dart';
 import 'package:diagram_builder/presentation/model/node_entity.dart';
@@ -24,7 +22,24 @@ class DiagramViewModel extends ValueNotifier {
   LinkableModel? currentLink;
 
   void Function(NodeModel originNode, NodeModel targetNode)? onNodeLinking;
-  void Function(Offset position)? onPointerReleaseWithoutLinking;
+  void Function(NodeModel originNode, String linkableId, Offset position)?
+      onPointerReleaseWithoutLinking;
+
+  void addNode(NodeModel node) {
+    nodes[node.id] = node;
+    notifyListeners();
+  }
+
+  void linkNodes(NodeModel originNode, String linkableId, String targetNodeId) {
+    final linkableIndex =
+        originNode.linkables.indexWhere((element) => element.id == linkableId);
+
+    originNode.linkables[linkableIndex].targetNodeId = targetNodeId;
+    nodes[originNode.id] = originNode;
+    final targetNode = nodes[targetNodeId];
+    if (onNodeLinking != null) onNodeLinking!(originNode, targetNode!);
+    notifyListeners();
+  }
 
   void updateNodePosition({
     required String nodeId,
@@ -77,7 +92,8 @@ class DiagramViewModel extends ValueNotifier {
     }
     if (onPointerReleaseWithoutLinking != null) {
       if (hittableTargets.isEmpty) {
-        onPointerReleaseWithoutLinking!(cursorPath!.target);
+        onPointerReleaseWithoutLinking!(
+            originNode!, currentLink!.id, cursorPath!.target);
       }
     }
     cursorPath = null;
