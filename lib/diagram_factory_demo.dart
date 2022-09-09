@@ -1,8 +1,6 @@
 import 'package:diagram_builder/diagram_builder.dart';
 import 'package:flutter/material.dart';
 
-import 'presentation/model/linkable_model.dart';
-
 class DiagramFactoryDemoPage extends StatefulWidget {
   const DiagramFactoryDemoPage({Key? key}) : super(key: key);
 
@@ -81,8 +79,11 @@ class _RedItemFactory extends NodeFactory<_RedItem> {
       id: nodeId,
       position: Offset.zero,
       builder: ((context, linkables) {
+        final linkable = linkables.first;
         return LinkableWidget(
-          data: linkables.first as LinkableModel,
+          key: linkable.key,
+          id: linkable.id,
+          nodeId: linkable.nodeId,
           child: Container(
             width: 100,
             height: 100,
@@ -105,8 +106,11 @@ class _BlueItemFactory extends NodeFactory<_BlueItem> {
       id: nodeId,
       position: Offset.zero,
       builder: ((context, linkables) {
+        final linkable = linkables.first;
         return LinkableWidget(
-          data: linkables.first as LinkableModel,
+          key: linkable.key,
+          id: linkable.id,
+          nodeId: linkable.nodeId,
           child: Container(
             width: 200,
             height: 200,
@@ -115,7 +119,9 @@ class _BlueItemFactory extends NodeFactory<_BlueItem> {
                 children: List.generate(
                     linkables.length,
                     (index) => LinkableWidget(
-                          data: linkables[index] as LinkableModel,
+                          key: linkables[index].key,
+                          id: linkables[index].id,
+                          nodeId: linkables[index].nodeId,
                           child: Container(
                             margin: const EdgeInsets.symmetric(vertical: 10),
                             width: 50,

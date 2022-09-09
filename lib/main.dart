@@ -1,4 +1,3 @@
-import 'package:diagram_builder/diagram_factory_demo.dart';
 import 'package:diagram_builder/presentation/model/linkable_model.dart';
 import 'package:diagram_builder/presentation/widgets/diagram_overlay.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +96,8 @@ class _DiagramPageState extends State<DiagramPage> {
                   .map<Widget>(
                     (linkable) => LinkableWidget(
                         key: linkable.key,
-                        data: linkable as LinkableModel,
+                        id: linkable.id,
+                        nodeId: linkable.nodeId,
                         child: Container(
                           color: Colors.pink,
                           width: 80,
@@ -128,8 +128,9 @@ class _DiagramPageState extends State<DiagramPage> {
       builder: (context, linkables) {
         final linkable = linkables.first;
         return LinkableWidget(
-          data: linkable as LinkableModel,
           key: linkable.key,
+          id: linkable.id,
+          nodeId: linkable.nodeId,
           child: Container(
             alignment: Alignment.center,
             width: 100,
