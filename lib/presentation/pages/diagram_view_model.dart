@@ -60,23 +60,25 @@ class DiagramViewModel extends ValueNotifier {
             distance: node.targetPoint.computeDistance(cursorPath!.target)))
         .toList();
     nodeDistances.sort((a, b) => a.distance.compareTo(b.distance));
-    final possibleTargets = nodeDistances
-        .where((element) => element.node.id != originNode!.id)
+    final hittableTargets = nodeDistances
+        .where((element) =>
+            element.node.id != originNode!.id && element.distance < 50)
         .toList();
-    // final possibleTargets = nodeDistances.where((node) => node.distance < 50);
-    if (possibleTargets.isNotEmpty) {
+    if (hittableTargets.isNotEmpty) {
       final linkableIndex = originNode!.linkables
           .indexWhere((element) => element.id == currentLink!.id);
 
       originNode.linkables[linkableIndex].targetNodeId =
-          possibleTargets.first.node.id;
+          hittableTargets.first.node.id;
 
       if (onNodeLinking != null) {
-        onNodeLinking!(nodes[originNode.id]!, possibleTargets.first.node);
+        onNodeLinking!(nodes[originNode.id]!, hittableTargets.first.node);
       }
     }
     if (onPointerReleaseWithoutLinking != null) {
-      onPointerReleaseWithoutLinking!(cursorPath!.target);
+      if (hittableTargets.isEmpty) {
+        onPointerReleaseWithoutLinking!(cursorPath!.target);
+      }
     }
     cursorPath = null;
     currentLink = null;
