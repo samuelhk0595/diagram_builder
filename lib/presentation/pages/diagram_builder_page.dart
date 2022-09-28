@@ -19,6 +19,8 @@ class DiagramBuilder<T> extends StatefulWidget {
     this.onPointerReleaseWithoutLinking,
     this.overlays,
     this.onCreated,
+    this.canvasColor,
+    this.onTap,
   }) : super(key: key);
 
   final double width;
@@ -34,6 +36,8 @@ class DiagramBuilder<T> extends StatefulWidget {
       onPointerReleaseWithoutLinking;
   final List<DiagramOverlay>? overlays;
   final void Function(DiagramController controller)? onCreated;
+  final Color? canvasColor;
+  final Function()? onTap;
 
   @override
   State<DiagramBuilder> createState() => _DiagramBuilderState();
@@ -61,67 +65,70 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xff3A3D5C),
-      child: MouseRegion(
-        onHover: (details) {
-          viewModel.updateCursorPosition(details.position);
-        },
-        child: AnimatedBuilder(
-          animation: viewModel,
-          builder: (context, _) {
-            return Stack(
-              children: [
-                Positioned(
-                  left: viewModel.cursorPath?.target.dx ?? 0.0,
-                  top: viewModel.cursorPath?.target.dy ?? 0.0,
-                  child: Container(),
-                ),
-                CustomPaint(
-                  foregroundPainter: NodeLinkPainter(
-                    pathCretor: pathCreator,
-                    nodes: viewModel.nodes.values.toList(),
-                  ),
-                  painter: ArrowPainter(pathCretor: pathCreator, paths: [
-                    PathModel(
-                      origin: viewModel.cursorPath?.origin ?? Offset.zero,
-                      target: viewModel.cursorPath?.target ?? Offset.zero,
-                    ),
-                  ]),
-                  child: SizedBox(
-                    width: widget.width,
-                    height: widget.height,
-                    child: Stack(
-                        children: viewModel.nodes.values.map((node) {
-                      return NodePositioner(
-                        offset: node.position,
-                        key: node.key,
-                        child: NodeGestureHandler(
-                            onDragUpdate: (position) {
-                              viewModel.updateNodePosition(
-                                nodeId: node.id,
-                                position: position,
-                              );
-                              if (widget.onNodePositionUpdate != null) {
-                                widget.onNodePositionUpdate!(node);
-                              }
-                            },
-                            child: node.builder(context, node.linkables)),
-                      );
-                    }).toList()),
-                  ),
-                ),
-                if (widget.overlays != null)
-                  ...widget.overlays!.map<Widget>((overlay) {
-                    return Positioned(
-                      left: overlay.position.dx,
-                      top: overlay.position.dy,
-                      child: overlay.builder(context),
-                    );
-                  }).toList(),
-              ],
-            );
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: Container(
+        color: widget.canvasColor ?? const Color(0xff454B6B),
+        child: MouseRegion(
+          onHover: (details) {
+            viewModel.updateCursorPosition(details.position);
           },
+          child: AnimatedBuilder(
+            animation: viewModel,
+            builder: (context, _) {
+              return Stack(
+                children: [
+                  Positioned(
+                    left: viewModel.cursorPath?.target.dx ?? 0.0,
+                    top: viewModel.cursorPath?.target.dy ?? 0.0,
+                    child: Container(),
+                  ),
+                  CustomPaint(
+                    foregroundPainter: NodeLinkPainter(
+                      pathCretor: pathCreator,
+                      nodes: viewModel.nodes.values.toList(),
+                    ),
+                    painter: ArrowPainter(pathCretor: pathCreator, paths: [
+                      PathModel(
+                        origin: viewModel.cursorPath?.origin ?? Offset.zero,
+                        target: viewModel.cursorPath?.target ?? Offset.zero,
+                      ),
+                    ]),
+                    child: SizedBox(
+                      width: widget.width,
+                      height: widget.height,
+                      child: Stack(
+                          children: viewModel.nodes.values.map((node) {
+                        return NodePositioner(
+                          offset: node.position,
+                          key: node.key,
+                          child: NodeGestureHandler(
+                              onDragUpdate: (position) {
+                                viewModel.updateNodePosition(
+                                  nodeId: node.id,
+                                  position: position,
+                                );
+                                if (widget.onNodePositionUpdate != null) {
+                                  widget.onNodePositionUpdate!(node);
+                                }
+                              },
+                              child: node.builder(context, node.linkables)),
+                        );
+                      }).toList()),
+                    ),
+                  ),
+                  if (widget.overlays != null)
+                    ...widget.overlays!.map<Widget>((overlay) {
+                      return Positioned(
+                        left: overlay.position.dx,
+                        top: overlay.position.dy,
+                        child: overlay.builder(context),
+                      );
+                    }).toList(),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
