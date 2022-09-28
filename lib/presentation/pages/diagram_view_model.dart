@@ -21,7 +21,8 @@ class DiagramViewModel extends ValueNotifier {
   // NodeModel? originNode;
   LinkableModel? currentLink;
 
-  void Function(NodeModel originNode, NodeModel targetNode)? onNodeLinking;
+  void Function(NodeModel originNode, NodeModel targetNode, String linkableId)?
+      onNodeLinking;
   void Function(NodeModel originNode, String linkableId, Offset position)?
       onPointerReleaseWithoutLinking;
 
@@ -37,7 +38,10 @@ class DiagramViewModel extends ValueNotifier {
     originNode.linkables[linkableIndex].targetNodeId = targetNodeId;
     nodes[originNode.id] = originNode;
     final targetNode = nodes[targetNodeId];
-    if (onNodeLinking != null) onNodeLinking!(originNode, targetNode!);
+    if (onNodeLinking != null) {
+      onNodeLinking!(
+          originNode, targetNode!, originNode.linkables[linkableIndex].id);
+    }
     notifyListeners();
   }
 
@@ -87,7 +91,8 @@ class DiagramViewModel extends ValueNotifier {
           hittableTargets.first.node.id;
 
       if (onNodeLinking != null) {
-        onNodeLinking!(nodes[originNode.id]!, hittableTargets.first.node);
+        onNodeLinking!(nodes[originNode.id]!, hittableTargets.first.node,
+            originNode.linkables[linkableIndex].id);
       }
     }
     if (onPointerReleaseWithoutLinking != null) {

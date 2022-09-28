@@ -26,7 +26,8 @@ class DiagramBuilder<T> extends StatefulWidget {
   final double width;
   final double height;
   final Map<String, NodeModel> nodes;
-  final void Function(NodeModel originNode, NodeModel targetNode)?
+  final void Function(
+          NodeModel originNode, NodeModel targetNode, String linkableId)?
       onNodeLinking;
   final void Function(
     NodeModel originNode,

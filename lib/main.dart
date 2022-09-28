@@ -43,9 +43,10 @@ class _DiagramPageState extends State<DiagramPage> {
       body: DiagramBuilder(
         nodes: nodes,
         overlays: overlays,
-        onNodeLinking: (originNode, targetNode) {
+        onNodeLinking: (originNode, targetNode, linkableId) {
           print(originNode.id);
           print(targetNode.id);
+          print(linkableId);
         },
         onNodePositionUpdate: (node) {
           print('${node.id}  ${node.position}');
