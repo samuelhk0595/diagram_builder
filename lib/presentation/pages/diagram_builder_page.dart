@@ -103,6 +103,11 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
                           offset: node.position,
                           key: node.key,
                           child: NodeGestureHandler(
+                              onTap: () {
+                                if (node.onNodeTap != null) {
+                                  node.onNodeTap!(node.id);
+                                }
+                              },
                               onDragUpdate: (position) {
                                 viewModel.updateNodePosition(
                                   nodeId: node.id,

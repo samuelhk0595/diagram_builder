@@ -8,11 +8,13 @@ abstract class NodeEntity {
     required this.builder,
     required this.key,
     required this.linkables,
+    this.onNodeTap,
   });
   final String id;
   final Widget Function(BuildContext context, List<LinkableEntity> linkables)
       builder;
   final GlobalKey key;
+  void Function(String nodeId)? onNodeTap;
   List<LinkableEntity> linkables;
   Offset position;
   

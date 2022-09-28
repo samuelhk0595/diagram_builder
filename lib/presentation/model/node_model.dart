@@ -9,6 +9,7 @@ class NodeModel extends NodeEntity {
     required super.position,
     required super.builder,
     required List<LinkableModel> linkables,
+    super.onNodeTap,
   }) : super(linkables: linkables, key: GlobalKey());
 
   RenderBox get _renderBox =>
