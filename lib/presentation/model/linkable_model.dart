@@ -14,4 +14,5 @@ class LinkableModel extends LinkableEntity {
   @override
   Offset get originPoint =>
       _renderBox.localToGlobal(_renderBox.paintBounds.centerRight);
+      
 }

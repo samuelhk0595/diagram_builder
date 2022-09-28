@@ -19,29 +19,7 @@ class DiagramBuilder<T> extends StatefulWidget {
     this.onPointerReleaseWithoutLinking,
     this.overlays,
     this.onCreated,
-  })  : factories = const [],
-        items = const [],
-        _isOnFactoryMode = false,
-        super(key: key);
-
-  const DiagramBuilder.factory({
-    Key? key,
-    this.width = 1920,
-    this.height = 1080,
-    this.onNodeLinking,
-    required this.factories,
-    required this.items,
-    this.onNodePositionUpdate,
-    this.onPointerReleaseWithoutLinking,
-    this.overlays,
-    this.onCreated,
-  })  : nodes = const {},
-        _isOnFactoryMode = true,
-        super(key: key);
-
-  final List<T> items;
-  final List<NodeFactory> factories;
-  final bool _isOnFactoryMode;
+  }) : super(key: key);
 
   final double width;
   final double height;
@@ -52,7 +30,7 @@ class DiagramBuilder<T> extends StatefulWidget {
     NodeModel originNode,
   )? onNodePositionUpdate;
 
-final void Function(NodeModel originNode, String linkableId, Offset position)?
+  final void Function(NodeModel originNode, String linkableId, Offset position)?
       onPointerReleaseWithoutLinking;
   final List<DiagramOverlay>? overlays;
   final void Function(DiagramController controller)? onCreated;
@@ -65,23 +43,11 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
   @override
   void initState() {
     super.initState();
-    if (widget._isOnFactoryMode) {
-      Map<String, NodeModel> nodes = {};
-      for (final item in widget.items) {
-        final nodeFactory = widget.factories.singleWhere(
-          (element) => element.nodeType == item.runtimeType,
-        );
-        final node = nodeFactory.build(item);
-        nodes[node.id] = node;
-      }
-      viewModel.nodes = nodes;
-      viewModel.onNodeLinking = widget.onNodeLinking;
-    } else {
-      viewModel.nodes = widget.nodes;
-      viewModel.onNodeLinking = widget.onNodeLinking;
-      viewModel.onPointerReleaseWithoutLinking =
-          widget.onPointerReleaseWithoutLinking;
-    }
+
+    viewModel.nodes = widget.nodes;
+    viewModel.onNodeLinking = widget.onNodeLinking;
+    viewModel.onPointerReleaseWithoutLinking =
+        widget.onPointerReleaseWithoutLinking;
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (widget.onCreated != null) {
