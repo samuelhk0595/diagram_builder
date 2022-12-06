@@ -39,10 +39,14 @@ class _DiagramPageState extends State<DiagramPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
       body: DiagramBuilder(
         nodes: nodes,
         overlays: overlays,
+        width: screenSize.width * 2,
+        height: screenSize.height * 2,
         onNodeLinking: (originNode, targetNode, linkableId) {
           print(originNode.id);
           print(targetNode.id);

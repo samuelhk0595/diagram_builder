@@ -95,32 +95,38 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
                         target: viewModel.cursorPath?.target ?? Offset.zero,
                       ),
                     ]),
-                    child: SizedBox(
-                      width: widget.width,
-                      height: widget.height,
-                      child: Stack(
-                          children: viewModel.nodes.values.map((node) {
-                        return NodePositioner(
-                          offset: node.position,
-                          key: node.key,
-                          child: NodeGestureHandler(
-                              onTap: () {
-                                if (node.onNodeTap != null) {
-                                  node.onNodeTap!(node.id);
-                                }
-                              },
-                              onDragUpdate: (position) {
-                                viewModel.updateNodePosition(
-                                  nodeId: node.id,
-                                  position: position,
-                                );
-                                if (widget.onNodePositionUpdate != null) {
-                                  widget.onNodePositionUpdate!(node);
-                                }
-                              },
-                              child: node.builder(context, node.linkables)),
-                        );
-                      }).toList()),
+                    child: InteractiveViewer(
+                      constrained: false,
+                      minScale: 0.05,
+
+                      scaleFactor: 1500,
+                      child: SizedBox(
+                        width: widget.width,
+                        height: widget.height,
+                        child: Stack(
+                            children: viewModel.nodes.values.map((node) {
+                          return NodePositioner(
+                            offset: node.position,
+                            key: node.key,
+                            child: NodeGestureHandler(
+                                onTap: () {
+                                  if (node.onNodeTap != null) {
+                                    node.onNodeTap!(node.id);
+                                  }
+                                },
+                                onDragUpdate: (position) {
+                                  viewModel.updateNodePosition(
+                                    nodeId: node.id,
+                                    position: position,
+                                  );
+                                  if (widget.onNodePositionUpdate != null) {
+                                    widget.onNodePositionUpdate!(node);
+                                  }
+                                },
+                                child: node.builder(context, node.linkables)),
+                          );
+                        }).toList()),
+                      ),
                     ),
                   ),
                   if (widget.overlays != null)
