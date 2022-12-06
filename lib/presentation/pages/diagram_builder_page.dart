@@ -98,7 +98,6 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
                     child: InteractiveViewer(
                       constrained: false,
                       minScale: 0.05,
-
                       scaleFactor: 1500,
                       child: SizedBox(
                         width: widget.width,
@@ -114,10 +113,11 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
                                     node.onNodeTap!(node.id);
                                   }
                                 },
-                                onDragUpdate: (position) {
+                                onDragUpdate: (localPosition, globalPosition) {
                                   viewModel.updateNodePosition(
                                     nodeId: node.id,
-                                    position: position,
+                                    globalPosition: globalPosition,
+                                    localPosition: localPosition,
                                   );
                                   if (widget.onNodePositionUpdate != null) {
                                     widget.onNodePositionUpdate!(node);

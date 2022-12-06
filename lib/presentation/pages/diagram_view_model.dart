@@ -47,9 +47,12 @@ class DiagramViewModel extends ValueNotifier {
 
   void updateNodePosition({
     required String nodeId,
-    required Offset position,
+    required Offset globalPosition,
+    required Offset localPosition,
   }) {
-    nodes[nodeId]!.position = position;
+    final newPosition = Offset(globalPosition.dx - localPosition.dx,
+        globalPosition.dy - localPosition.dy);
+    nodes[nodeId]!.position = newPosition;
     notifyListeners();
   }
 
