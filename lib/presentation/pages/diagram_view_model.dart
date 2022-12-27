@@ -113,7 +113,7 @@ class DiagramViewModel extends ValueNotifier {
     if (onPointerReleaseWithoutLinking != null) {
       if (hittableTargets.isEmpty) {
         onPointerReleaseWithoutLinking!(
-            originNode!, currentLink!.id, cursorPath!.target);
+            originNode!, currentLink!.id, cursorPath!.target.translate(canvasPosition.dx * -1, canvasPosition.dy * -1));
       }
     }
     cursorPath = null;
