@@ -40,7 +40,7 @@ class NodeLinkPainter extends CustomPainter {
 
           canvas.drawPoints(pointMode, [...points], paint);
 
-          final arrowPath = buildArrowPath(targetNode.targetPoint);
+          final arrowPath = buildArrowPath(targetNode.targetPoint.translate(canvasPosition.dx * -1, canvasPosition.dy * -1));
           canvas.drawPath(arrowPath, paint);
         }
       }
