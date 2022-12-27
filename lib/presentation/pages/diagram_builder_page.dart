@@ -86,12 +86,12 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
                     child: Container(),
                   ),
                   CustomPaint(
-                    foregroundPainter: NodeLinkPainter(
+                    painter: NodeLinkPainter(
                       canvasPosition: viewModel.canvasPosition,
                       pathCretor: pathCreator,
                       nodes: viewModel.nodes.values.toList(),
                     ),
-                    painter: ArrowPainter(pathCretor: pathCreator, paths: [
+                    foregroundPainter: ArrowPainter(pathCretor: pathCreator, paths: [
                       PathModel(
                         origin: viewModel.cursorPath?.origin ?? Offset.zero,
                         target: viewModel.cursorPath?.target ?? Offset.zero,
