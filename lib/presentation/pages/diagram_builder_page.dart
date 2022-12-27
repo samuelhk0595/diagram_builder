@@ -67,6 +67,7 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      key: viewModel.widgetKey,
       onTap: widget.onTap,
       child: Container(
         color: widget.canvasColor ?? const Color(0xff454B6B),

@@ -20,6 +20,7 @@ class DiagramViewModel extends ValueNotifier {
   Offset cursorPosition = Offset.zero;
   // NodeModel? originNode;
   LinkableModel? currentLink;
+  final widgetKey = GlobalKey();
 
   void Function(NodeModel originNode, NodeModel targetNode, String linkableId)?
       onNodeLinking;
@@ -59,6 +60,11 @@ class DiagramViewModel extends ValueNotifier {
     required String nodeId,
     required String linkableId,
   }) {
+    final renderBox = widgetKey.currentContext!.findRenderObject() as RenderBox;
+    final canvasPosition = renderBox.localToGlobal(Offset.zero);
+
+    position = position.translate(canvasPosition.dx * -1, canvasPosition.dy * -1);
+
     final originNode = nodes[nodeId];
     currentLink = originNode!.linkables
         .singleWhere((element) => element.id == linkableId) as LinkableModel;
@@ -67,6 +73,11 @@ class DiagramViewModel extends ValueNotifier {
   }
 
   void updateCursorPath(Offset position) {
+    final renderBox = widgetKey.currentContext!.findRenderObject() as RenderBox;
+    final canvasPosition = renderBox.localToGlobal(Offset.zero);
+
+    position = position.translate(canvasPosition.dx * -1, canvasPosition.dy * -1);
+    
     cursorPath!.target = position;
     notifyListeners();
   }

@@ -42,6 +42,7 @@ class _DiagramPageState extends State<DiagramPage> {
     final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
+      // appBar: AppBar(),
       body: DiagramBuilder(
         nodes: nodes,
         overlays: overlays,
