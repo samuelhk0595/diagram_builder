@@ -55,15 +55,18 @@ class DiagramViewModel extends ValueNotifier {
     notifyListeners();
   }
 
+  Offset get canvasPosition {
+    final renderBox = widgetKey.currentContext!.findRenderObject() as RenderBox;
+    return renderBox.localToGlobal(Offset.zero);
+  }
+
   void startCursorPath({
     required Offset position,
     required String nodeId,
     required String linkableId,
   }) {
-    final renderBox = widgetKey.currentContext!.findRenderObject() as RenderBox;
-    final canvasPosition = renderBox.localToGlobal(Offset.zero);
-
-    position = position.translate(canvasPosition.dx * -1, canvasPosition.dy * -1);
+    position =
+        position.translate(canvasPosition.dx * -1, canvasPosition.dy * -1);
 
     final originNode = nodes[nodeId];
     currentLink = originNode!.linkables
@@ -73,11 +76,11 @@ class DiagramViewModel extends ValueNotifier {
   }
 
   void updateCursorPath(Offset position) {
-    final renderBox = widgetKey.currentContext!.findRenderObject() as RenderBox;
-    final canvasPosition = renderBox.localToGlobal(Offset.zero);
-
-    position = position.translate(canvasPosition.dx * -1, canvasPosition.dy * -1);
     
+
+    position =
+        position.translate(canvasPosition.dx * -1, canvasPosition.dy * -1);
+
     cursorPath!.target = position;
     notifyListeners();
   }

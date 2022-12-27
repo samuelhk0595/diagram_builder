@@ -87,6 +87,7 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
                   ),
                   CustomPaint(
                     foregroundPainter: NodeLinkPainter(
+                      canvasPosition: viewModel.canvasPosition,
                       pathCretor: pathCreator,
                       nodes: viewModel.nodes.values.toList(),
                     ),

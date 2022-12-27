@@ -7,11 +7,14 @@ import 'package:flutter/material.dart';
 class NodeLinkPainter extends CustomPainter {
   NodeLinkPainter({
     required this.nodes,
+    required this.canvasPosition,
     this.pathCretor,
+
   });
 
   final List<NodeModel> nodes;
   final PathCreator? pathCretor;
+  final Offset canvasPosition;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -30,10 +33,10 @@ class NodeLinkPainter extends CustomPainter {
 
           final originPoint = linkable.originPoint;
           final points = pathCretor?.linkPoints(
-                origin: originPoint,
-                target: targetNode.targetPoint,
+                origin: originPoint.translate(canvasPosition.dx * -1, canvasPosition.dy * -1),
+                target: targetNode.targetPoint.translate(canvasPosition.dx * -1, canvasPosition.dy * -1),
               ) ??
-              [originNode.originPoint, originNode.targetPoint];
+              [originNode.originPoint.translate(canvasPosition.dx * -1, canvasPosition.dy * -1), originNode.targetPoint.translate(canvasPosition.dx * -1, canvasPosition.dy * -1)];
 
           canvas.drawPoints(pointMode, [...points], paint);
 
