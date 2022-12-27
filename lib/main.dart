@@ -53,7 +53,7 @@ class _DiagramPageState extends State<DiagramPage> {
           print(linkableId);
         },
         onNodePositionUpdate: (node) {
-          print('${node.id}  ${node.position}');
+          // print('${node.id}  ${node.position}');
         },
         onPointerReleaseWithoutLinking: (originNode, linkableId, position) {
           addOverlay(position);

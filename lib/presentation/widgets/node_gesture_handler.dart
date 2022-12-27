@@ -4,8 +4,7 @@ class NodeGestureHandler extends StatefulWidget {
   const NodeGestureHandler(
       {required this.child, this.onDragUpdate, this.onTap, super.key});
 
-  final void Function(Offset localPosition, Offset globalPosition)?
-      onDragUpdate;
+  final void Function(Offset newPosition)? onDragUpdate;
   final void Function()? onTap;
   final Widget child;
 
@@ -24,7 +23,7 @@ class _NodeGestureHandlerState extends State<NodeGestureHandler> {
       },
       onPanUpdate: (details) {
         if (widget.onDragUpdate != null) {
-          widget.onDragUpdate!(localPosition, details.globalPosition);
+          widget.onDragUpdate!(details.delta);
         }
       },
       child: widget.child,

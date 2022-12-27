@@ -113,11 +113,10 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
                                     node.onNodeTap!(node.id);
                                   }
                                 },
-                                onDragUpdate: (localPosition, globalPosition) {
+                                onDragUpdate: (newPosition) {
                                   viewModel.updateNodePosition(
                                     nodeId: node.id,
-                                    globalPosition: globalPosition,
-                                    localPosition: localPosition,
+                                    newPosition: newPosition,
                                   );
                                   if (widget.onNodePositionUpdate != null) {
                                     widget.onNodePositionUpdate!(node);
