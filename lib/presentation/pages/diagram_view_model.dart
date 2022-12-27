@@ -56,7 +56,9 @@ class DiagramViewModel extends ValueNotifier {
   }
 
   Offset get canvasPosition {
-    final renderBox = widgetKey.currentContext!.findRenderObject() as RenderBox;
+    final renderBox =
+        widgetKey.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox == null) return Offset.zero;
     return renderBox.localToGlobal(Offset.zero);
   }
 
@@ -76,8 +78,6 @@ class DiagramViewModel extends ValueNotifier {
   }
 
   void updateCursorPath(Offset position) {
-    
-
     position =
         position.translate(canvasPosition.dx * -1, canvasPosition.dy * -1);
 
