@@ -28,16 +28,16 @@ class ArrowPainter extends CustomPainter {
 
       canvas.drawPoints(pointMode, [...points], paint);
 
-      // for (final point in points) {
-      //   TextSpan span = TextSpan(
-      //       style: TextStyle(color: Colors.red), text: point.toString());
-      //   TextPainter tp = TextPainter(
-      //       text: span,
-      //       textAlign: TextAlign.left,
-      //       textDirection: TextDirection.ltr);
-      //   tp.layout();
-      //   tp.paint(canvas, point);
-      // }
+      for (final point in points) {
+        TextSpan span = TextSpan(
+            style: TextStyle(color: Colors.red), text: point.toString());
+        TextPainter tp = TextPainter(
+            text: span,
+            textAlign: TextAlign.left,
+            textDirection: TextDirection.ltr);
+        tp.layout();
+        tp.paint(canvas, point);
+      }
     }
   }
 
