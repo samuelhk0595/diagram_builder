@@ -63,7 +63,7 @@ class DiagramViewModel extends ValueNotifier {
     final renderBox = widgetKey.currentContext!.findRenderObject() as RenderBox;
     final canvasPosition = renderBox.localToGlobal(Offset.zero);
 
-    position = position.translate(canvasPosition.dx, canvasPosition.dy * -1);
+    position = position.translate(canvasPosition.dx * -1, canvasPosition.dy * -1);
 
     final originNode = nodes[nodeId];
     currentLink = originNode!.linkables
