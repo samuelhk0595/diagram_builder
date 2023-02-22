@@ -6,6 +6,12 @@ class ArrowPathCreator extends PathCreator {
   @override
   List<Offset> generatePoints(PathModel path) {
     final points = [path.origin];
+
+    // double module = path.target.dx - path.origin.dx;
+    // if (module < 0) module = (module * -1);
+
+    // final originHeightPoint = Offset(module / 2, path.origin.dy);
+    // points.add(originHeightPoint);
     points.add(path.target);
     return points;
 
@@ -61,10 +67,10 @@ class ArrowPathCreator extends PathCreator {
       return TargetNodePosition.diagonalBottomLeft;
     }
   }
-  
+
   @override
   List<Offset> linkPoints({required Offset origin, required Offset target}) {
-    return [origin,target];
+    return [origin, target];
   }
 }
 
