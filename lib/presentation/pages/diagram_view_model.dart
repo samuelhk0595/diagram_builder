@@ -123,6 +123,5 @@ class DiagramViewModel extends ValueNotifier {
 
   void updateCursorPosition(Offset position) {
     cursorPosition = position;
-    notifyListeners();
   }
 }
