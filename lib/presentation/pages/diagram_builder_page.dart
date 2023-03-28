@@ -91,7 +91,8 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
                       pathCretor: pathCreator,
                       nodes: viewModel.nodes.values.toList(),
                     ),
-                    foregroundPainter: ArrowPainter(pathCretor: pathCreator, paths: [
+                    foregroundPainter:
+                        ArrowPainter(pathCretor: pathCreator, paths: [
                       PathModel(
                         origin: viewModel.cursorPath?.origin ?? Offset.zero,
                         target: viewModel.cursorPath?.target ?? Offset.zero,
@@ -109,22 +110,33 @@ class _DiagramBuilderState extends State<DiagramBuilder> {
                           return NodePositioner(
                             offset: node.position,
                             key: node.key,
-                            child: NodeGestureHandler(
-                                onTap: () {
-                                  if (node.onNodeTap != null) {
-                                    node.onNodeTap!(node.id);
-                                  }
-                                },
-                                onDragUpdate: (newPosition) {
-                                  viewModel.updateNodePosition(
-                                    nodeId: node.id,
-                                    newPosition: newPosition,
-                                  );
-                                  if (widget.onNodePositionUpdate != null) {
-                                    widget.onNodePositionUpdate!(node);
-                                  }
-                                },
-                                child: node.builder(context, node.linkables)),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                NodeGestureHandler(
+                                    onTap: () {
+                                      if (node.onNodeTap != null) {
+                                        node.onNodeTap!(node.id);
+                                      }
+                                    },
+                                    onDragUpdate: (newPosition) {
+                                      viewModel.updateNodePosition(
+                                        nodeId: node.id,
+                                        newPosition: newPosition,
+                                      );
+                                      if (widget.onNodePositionUpdate != null) {
+                                        widget.onNodePositionUpdate!(node);
+                                      }
+                                    },
+                                    child:
+                                        node.builder(context, node.linkables)),
+                                if (node.freeGestureBuilder != null)
+                                  GestureDetector(
+                                    child: node.freeGestureBuilder!(
+                                        context, node.linkables),
+                                  ),
+                              ],
+                            ),
                           );
                         }).toList()),
                       ),
